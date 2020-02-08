@@ -1,0 +1,139 @@
+import sys
+print(sys.path)
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+%matplotlib inline
+import seaborn as sns
+
+train_df=pd.read_excel('Data_Train.xlsx')
+test_df=pd.read_excel('Test_set.xlsx')
+train_df.head()
+test_df.head()
+
+big_df=train_df.append(test_df,sort=False)
+big_df.tail()
+big_df.dtypes
+
+#Feature Engineering
+
+big_df['Date']=big_df['Date_of_Journey'].str.split('/').str[0]
+big_df['Month']=big_df['Date_of_Journey'].str.split('/').str[1]
+big_df['Year']=big_df['Date_of_Journey'].str.split('/').str[2]
+big_df.head()
+big_df.dtypes
+
+big_df['Date']=big_df['Date'].astype(int)
+big_df['Month']=big_df['Month'].astype(int)
+big_df['Year']=big_df['Year'].astype(int)
+big_df.dtypes
+
+big_df=big_df.drop(['Date_of_Journey'],axis=1)
+big_df.head()
+
+big_df['Arrival_Time']=big_df['Arrival_Time'].str.split(' ').str[0]
+big_df.head()
+
+big_df[big_df['Total_Stops'].isnull()]
+big_df['Total_Stops']=big_df['Total_Stops'].fillna('1 stop')
+big_df['Total_Stops']=big_df['Total_Stops'].replace('non-stop','0 stop')
+big_df.head()
+
+big_df['Stop'] = big_df['Total_Stops'].str.split(' ').str[0]
+big_df.head()
+big_df.dtypes
+
+big_df['Stop']=big_df['Stop'].astype(int)
+big_df=big_df.drop(['Total_Stops'],axis=1)
+big_df.head()
+
+
+
+
+big_df['Arrival_Hour'] = big_df['Arrival_Time'] .str.split(':').str[0]
+big_df['Arrival_Minute'] = big_df['Arrival_Time'] .str.split(':').str[1]
+
+big_df['Arrival_Hour']=big_df['Arrival_Hour'].astype(int)
+big_df['Arrival_Minute']=big_df['Arrival_Minute'].astype(int)
+big_df=big_df.drop(['Arrival_Time'],axis=1)
+
+big_df.head()
+
+
+big_df['Departure_Hour'] = big_df['Dep_Time'] .str.split(':').str[0]
+big_df['Departure_Minute'] = big_df['Dep_Time'] .str.split(':').str[1]
+
+big_df['Departure_Hour']=big_df['Departure_Hour'].astype(int)
+big_df['Departure_Minute']=big_df['Departure_Minute'].astype(int)
+big_df=big_df.drop(['Dep_Time'],axis=1)
+
+big_df.head()
+
+
+big_df['Route_1']=big_df['Route'].str.split('→ ').str[0]
+big_df['Route_2']=big_df['Route'].str.split('→ ').str[1]
+big_df['Route_3']=big_df['Route'].str.split('→ ').str[2]
+big_df['Route_4']=big_df['Route'].str.split('→ ').str[3]
+big_df['Route_5']=big_df['Route'].str.split('→ ').str[4]
+
+big_df.head()
+
+big_df['Price'].fillna((big_df['Price'].mean()),inplace=True)
+
+big_df['Route_1'].fillna("None",inplace=True)
+big_df['Route_2'].fillna("None",inplace=True)
+big_df['Route_3'].fillna("None",inplace=True)
+big_df['Route_4'].fillna("None",inplace=True)
+big_df['Route_5'].fillna("None",inplace=True)
+
+big_df.head()
+
+big_df=big_df.drop(['Route'],axis=1)
+big_df=big_df.drop(['Duration'],axis=1)
+
+big_df.head()
+
+big_df.isnull().sum()
+
+
+from sklearn.preprocessing import LabelEncoder
+encoder=LabelEncoder()
+big_df["Airline"]=encoder.fit_transform(big_df['Airline'])
+big_df["Source"]=encoder.fit_transform(big_df['Source'])
+big_df["Destination"]=encoder.fit_transform(big_df['Destination'])
+big_df["Additional_Info"]=encoder.fit_transform(big_df['Additional_Info'])
+big_df["Route_1"]=encoder.fit_transform(big_df['Route_1'])
+big_df["Route_2"]=encoder.fit_transform(big_df['Route_2'])
+big_df["Route_3"]=encoder.fit_transform(big_df['Route_3'])
+big_df["Route_4"]=encoder.fit_transform(big_df['Route_4'])
+big_df["Route_5"]=encoder.fit_transform(big_df['Route_5'])
+
+
+
+
+
+#FEATURE SELECTION
+
+from sklearn.linear_model import Lasso
+from sklearn.feature_selection import SelectFromModel
+
+df_train=big_df[0:10683]
+df_test=big_df[10683:]
+
+X=df_train.drop(['Price'],axis=1)
+y=df_train.Price
+
+from sklearn.model_selection import train_test_split
+X_train,X_test,y_train,y_test=train_test_split(X,y,test_size=0.3,random_state=0)
+
+model=SelectFromModel(Lasso(alpha=0.005,random_state=0))
+model.fit(X_train,y_train)
+
+model.get_support()
+
+selected_features=X_train.columns[(model.get_support())]
+selected_features
+
+X_train=X_train.drop(['Year'],axis=1)
+X_test=X_test.drop(['Year'],axis=1)
