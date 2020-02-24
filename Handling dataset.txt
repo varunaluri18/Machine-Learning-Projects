@@ -1,0 +1,175 @@
+GRAPHS
+QQ-Plot
+import statsmodels.api as sm
+sm.qqplot(a)
+````````````````````````````
+iloc and loc
+
+var.iloc[0:100,0:]
+
+var.loc[0,:]
+var.loc[[0,1,2],:]
+
+andrew ng deep learning course 1
+
+___________________________________
+var.loc[0:2,:]
+var.loc[:,'Name']
+var.loc[:,['Name','Age']]
+var.loc[:,'Name':'Embarked']
+var.loc[var.Sex=='male']
+var.loc[var.Sex=='male','Name']
+
+```````````````````````````````````````````
+Deleting a column from datset as 
+var.drop(['colname'],axis=1,inplace=True)
+____________________________________________
+Finding null values in dataset
+var.isnull().sum()
+var.isnull().mean()
+__________________________________________________________
+Finding unique vales in the column
+var.column.unique
+__________________________________________________________
+Finding the value count for unique values
+var.column.value_counts()
+_________________________________________________________
+Replacing TRUE and False by 0 & 1 as
+
+dummies = {True: 1, False: 0}
+data['diabetes'] = data['diabetes'].map(dummies)
+
+__________________________________________________________
+Replacing categorical variables to numeric values
+var['column'] = pd.factorize(var.column)[0]
+__________________________________________________________
+Replacing combination of str and num as 
+varun['Months'] = varun['Months'].replace(['GT6'],[6])
+________________________________________________________
+Replcing the null/any value with any value
+var['column']=var['column'].replace(9.75,10)
+__________________________________________________________
+Replacing nullvalues and missing values with "0"
+var['column']=var.column.fillna(0)
+__________________________________________________________
+
+Replcaing the otliers with mean or a value
+var['column']=var['column'].mask(var['column']>30,var['column'].mean())
+
+__________________________________________________________
+Replacing nullvalues and missing values with "mean(),mode()"
+var['column']=var.column.fillna(var['column'].mean())
+var['column']=var.column.fillna(var['column'].mode())
+
+__________________________________________________________
+combining two tables
+varun=pd.concat([tab1,tab2,axis='columns'])
+__________________________________________________________
+adding an another column to table
+var['columnname']=pd.Series(new column)
+__________________________________________________________
+Replacing the null values in CATEGORICAL column
+var['categorical_column'] = var['categorical_column'].fillna(var['categorical_column'].mode()[0])
+
+sns.heatmap(df.isnull(),yticklabels=False,cbar=False,cmap='coolwarm')
+___________________________________________________________
+
+cross-validation technique
+from sklearn.model_selection import cross_val_score
+print(cross_val_score(dtree,X,y,cv=5))
+____________________________________________
+ERROR
+
+print('MAE:', metrics.mean_absolute_error(y_test, predictions))
+print('MSE:', metrics.mean_squared_error(y_test, predictions))
+print('RMSE:', np.sqrt(metrics.mean_squared_error(y_test, predictions)))
+____________________________________________________
+Handling imbalance datasset using using UNDER-SAMPLING
+b = var[var['diagnosis']=='B']
+m = var[var['diagnosis']=='M']
+
+from imblearn.under_sampling import NearMiss
+nm = NearMiss(random_state=42)
+X_res,y_res = nm.fit_sample(X,y)
+
+__________________________________________________
+
+saving the model
+
+#Pickling
+import pickle
+with open ('nb_pickle','wb') as f:
+    pickle.dump(nb,f)    
+with open('nb_pickle','rb') as f:
+    mp = pickle.load(f)
+mp.predict(y_pred)
+...................
+import pickle
+filename='finalized_model.pkl'
+pickle.dump(tree,open(filename),'wb')
+....................
+#joblib
+from sklearn.externals import joblib
+joblib.dump(nb, 'nb_joblib')
+mj=joblib.load('nb_joblib')
+mj.predict(y_pred)
+________________________________________________
+Under sampling and Over Sampling
+# Over Sampling
+from imblearn.over_sampling import RandomOverSampler
+os = RandomOverSampler(ratio=1)
+X1,Y1 = os.fit_sample(X,Y)
+
+
+# Over Sampling
+from imblearn.combine import SMOTETomek
+smk= SMOTETomek(random_state=42)
+X1,Y1 = smk.fit_sample(X,y)
+
+
+# Under Sampling
+from imblearn.under_sampling import NearMiss
+us = NearMiss(random_state=42)
+X1,Y1 = us.fit_sample(X,Y)
+________________________________________________
+Ridge and Lasso Regression for Regularazation
+#Ridge Regression
+from sklearn.linear_model import Ridge
+ridge=Ridge()
+print(ridge.fit(X,y))
+
+#Lasso Regression
+from sklearn.linear_model import Lasso
+lasso=Lasso()
+print(lasso.fit(X,y))
+______________________________________________
+Grid SearchCV and Randomized SearchCV
+
+#Grid SearchCV
+from sklearn.model_selection import GridSearchCV
+from sklearn.model_selection import cross_val_score
+
+parameters= [{'c':[1,10,100,1000],'kernal':['linear']},
+             {'c':[1,10,100,1000],'kernal':['rbf']}]
+grid_search=GridSearchCV(estimator=svmlinear,
+                         param_grid=parameters,
+                         cv=10)
+
+grid_search.best_params_
+
+
+
+#Randomized searchCV
+from sklearn.model_selection import RAndomizedSearchCV
+from skipy.stats import randint
+
+est=RandomForestClassifier(n_jobs=-1)
+rf_p_dist={'max_depth':[3,5,10,None],
+		'n_estimators':[100,200,300,400,500],
+		'max_features':ranint(1,3),
+		'criterion':['gini','entropy'],
+		'bootstrap':[True,False]}
+rdm_search= RandomizedSearchCV(est,param_distributions=p_distr
+				,n_jobs=-1,n_iter=nbr_iter,cv=9)
+rdm_search.best_params_
+________________________________________________
