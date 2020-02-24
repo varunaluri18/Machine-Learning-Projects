@@ -1,0 +1,5 @@
+pred=pd.DataFrame(y_pred)
+sub_df=pd.read_csv('C://Users/Gopi/Desktop/house/final_sub.csv')
+datasets=pd.concat([sub_df['Id'],pred],axis=1)
+datasets.columns=['Id','SalePrice']
+datasets.to_csv('sample_submission.csv',index=False)
