@@ -1,0 +1,38 @@
+import pandas as pd
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+#h-clustering
+import scipy.cluster.hierarchy as sch
+from scipy.cluster.hierarchy import dendrogram, linkage
+from sklearn.cluster import AgglomerativeClustering
+
+#k-means clusterinfg
+from sklearn.cluster import KMeans
+
+#PCA
+from sklearn.decomposition import PCA
+
+#Regression with L1 & L2
+import statsmodels.formula.api as smf
+from sklearn.linear_model import LinearRegression
+from sklearn.linear_model import LogisticRegression
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.linear_model import Ridge
+from sklearn.linear_model import Lasso
+
+#Classification
+from sklearn.svm import SVC
+from sklearn.naive_bayes import GaussianNB
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier
+
+#Other for model building
+from sklearn.metrics import accuracy_score,confusion_matrix,classification_report
+from sklearn import metrics
+from sklearn.model_selection import train_test_split
+from sklearn.model_selection import RandomizedSearchCV
+from sklearn.model_selection import GridSearchCV
+from sklearn.model_selection import cross_val_score
