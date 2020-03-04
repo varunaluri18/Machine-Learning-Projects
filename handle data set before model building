@@ -1,17 +1,7 @@
-GRAPHS
-QQ-Plot
 import statsmodels.api as sm
 sm.qqplot(a)
-````````````````````````````
-iloc and loc
-
-var.iloc[0:100,0:]
-
-var.loc[0,:]
-var.loc[[0,1,2],:]
 
 andrew ng deep learning course 1
-
 ___________________________________
 var.loc[0:2,:]
 var.loc[:,'Name']
@@ -27,6 +17,9 @@ ____________________________________________
 Finding null values in dataset
 var.isnull().sum()
 var.isnull().mean()
+__________________________________________________________
+Filling NA value with 0 
+var['col'].fillna(0,inplace=True)
 __________________________________________________________
 Finding unique vales in the column
 var.column.unique
@@ -55,12 +48,13 @@ __________________________________________________________
 
 Replcaing the otliers with mean or a value
 var['column']=var['column'].mask(var['column']>30,var['column'].mean())
-
 __________________________________________________________
 Replacing nullvalues and missing values with "mean(),mode()"
-var['column']=var.column.fillna(var['column'].mean())
-var['column']=var.column.fillna(var['column'].mode())
-
+var['column']=var.column.fillna(var['column'].mean(),inplace=True)
+var['column']=var.column.fillna(var['column'].mode(),inplace=True)
+_________________________________________________________
+Printing data by based on particular variable
+var.loc[var['column_name']=='column_variable']
 __________________________________________________________
 combining two tables
 varun=pd.concat([tab1,tab2,axis='columns'])
@@ -154,7 +148,6 @@ parameters= [{'c':[1,10,100,1000],'kernal':['linear']},
 grid_search=GridSearchCV(estimator=svmlinear,
                          param_grid=parameters,
                          cv=10)
-
 grid_search.best_params_
 
 
@@ -173,3 +166,44 @@ rdm_search= RandomizedSearchCV(est,param_distributions=p_distr
 				,n_jobs=-1,n_iter=nbr_iter,cv=9)
 rdm_search.best_params_
 ________________________________________________
+Steps to follow for Build the Machine Learning model:
+
+1. Data
+1.1. Data overview
+
+2. Data Manipulation
+
+3. Exploratory Data Analysis
+3.1. Customer attrition in data
+3.2. Varibles distribution in customer attrition
+3.3. Customer attrition in tenure groups
+3.4. Monthly Charges and Total Charges by Tenure and Churn group
+3.5. Average Charges by tenure groups
+3.6. Monthly charges,total charges and tenure in customer attrition
+3.7. Variable Summary
+3.8. Correlation Matrix
+3.9. Visualising data with principal components
+3.10. Binary variables distribution in customer attrition(Radar Chart)
+
+4. Data preprocessing
+5. Model Building
+5.1. Baseline Model
+5.2. Synthetic Minority Oversampling TEchnique (SMOTE)
+5.3. Recursive Feature Elimination
+5.4. Univariate Selection
+5.5. Decision Tree Visualization
+5.6. KNN Classifier
+5.7. Vizualising a decision tree from random forest classifier
+5.8. A random forest classifier.
+5.9. Gaussian Naive Bayes
+5.10. Support Vector Machine
+5.11. Tuning parameters for support vector machine
+5.12. LightGBMClassifier
+5.13. XGBoost Classifier
+
+6. Model Performances
+6.1. model performance metrics
+6.2. Compare model metrics
+6.3. Confusion matrices for models
+6.4. ROC - Curves for models
+6.5. Precision recall curves
