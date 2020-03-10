@@ -166,6 +166,49 @@ rdm_search= RandomizedSearchCV(est,param_distributions=p_distr
 				,n_jobs=-1,n_iter=nbr_iter,cv=9)
 rdm_search.best_params_
 ________________________________________________
+
+Auto-SKlearn
+
+!apt-get install swig -y
+!pip install Cython numpy
+!pip install auto-sklearn
+
+import sklearn
+import autosklearn.classification as classifier
+from sklearn.model_selection import train_test_split
+
+automl = classifier.AutoSklearnClassifier(time_left_for_this_task=180,per_run_time_limit=40)
+automl.fit(X_train,y_train)
+y_pred=automl.predict(X_test)
+
+from sklearn.metrics import accuracY_score,confusion_matrix
+ac = accuracy_score(y_pred, y_test)
+cm = confusion_matrix(y_pred, y_test)
+print(cm)
+print(ac)
+
+automl.show_models()
+________________________________
+
+MAKE_pipeline
+
+from sklearn.pipeline import make_pipeline
+
+from sklearn.ensemble import RandomForestClassifier
+pipe = make_pipeline(RandomForestClassifier())
+grid_param = [
+		{"randomforestclassifier":RandomForestClassifier(),
+		 "randomforestclassifier__n_estimators":[10,100,1000],
+		 "randomforestclassifier__max_depth":[5,8,15,25,30,45]
+		}]
+
+from sklearn.model_selection import GridSearchCV
+gridsearch = GridSearchCV(pipe, grid_param, cv=5, n_jobs=-1)
+best_model = gridsearch.fit(X_train,y_train)
+
+best_model.score(X_test,y_test)
+______________________________________________________________________
+
 Steps to follow for Build the Machine Learning model:
 
 1. Data
