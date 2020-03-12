@@ -1,7 +1,11 @@
-import statsmodels.api as sm
-sm.qqplot(a)
-
-andrew ng deep learning course 1
+computer vision using microsoft cognitive services for images
+__________________________________
+one categorical features ----->one sample Proposition
+Two categorical features ----->Chi Square Test
+one continious features ----->T Test
+Two continious features ----->Co-releation Test
+continious + categorical(only 2 categories) ----->T Test
+continious + categorical(more than 2 categories) ----->Annova Test
 ___________________________________
 var.loc[0:2,:]
 var.loc[:,'Name']
@@ -9,10 +13,28 @@ var.loc[:,['Name','Age']]
 var.loc[:,'Name':'Embarked']
 var.loc[var.Sex=='male']
 var.loc[var.Sex=='male','Name']
-
-```````````````````````````````````````````
+__________________________________________
+Downloading data from sql
+conn = sqlite3.connect('C:\\Users\\HP\\Desktop\\GRE\\ML\\final.sqlite')
+final = pd.read_sql_query("""SELECT * FROM Reviews""", conn)
+conn.close()
+_______________________________________
+sorting data based on column
+data = final[['Score', 'Time', 'CleanedText']].copy()
+data.sort_values('Time', inplace = True)
+data.head(10)
+_______________________________________________
+SVM(Support Vector Machine)
+y = w0/b + w1x1 + w2x2 +w3x3.............
+w = vectors(w1,w2,w3....)
+b/w0 = biased term
+x = variables
+__________________________________________
 Deleting a column from datset as 
 var.drop(['colname'],axis=1,inplace=True)
+____________________________________________
+Dropping the row by based on the row number
+df.drop(105,axis=0,inplace=True)
 ____________________________________________
 Finding null values in dataset
 var.isnull().sum()
@@ -166,49 +188,6 @@ rdm_search= RandomizedSearchCV(est,param_distributions=p_distr
 				,n_jobs=-1,n_iter=nbr_iter,cv=9)
 rdm_search.best_params_
 ________________________________________________
-
-Auto-SKlearn
-
-!apt-get install swig -y
-!pip install Cython numpy
-!pip install auto-sklearn
-
-import sklearn
-import autosklearn.classification as classifier
-from sklearn.model_selection import train_test_split
-
-automl = classifier.AutoSklearnClassifier(time_left_for_this_task=180,per_run_time_limit=40)
-automl.fit(X_train,y_train)
-y_pred=automl.predict(X_test)
-
-from sklearn.metrics import accuracY_score,confusion_matrix
-ac = accuracy_score(y_pred, y_test)
-cm = confusion_matrix(y_pred, y_test)
-print(cm)
-print(ac)
-
-automl.show_models()
-________________________________
-
-MAKE_pipeline
-
-from sklearn.pipeline import make_pipeline
-
-from sklearn.ensemble import RandomForestClassifier
-pipe = make_pipeline(RandomForestClassifier())
-grid_param = [
-		{"randomforestclassifier":RandomForestClassifier(),
-		 "randomforestclassifier__n_estimators":[10,100,1000],
-		 "randomforestclassifier__max_depth":[5,8,15,25,30,45]
-		}]
-
-from sklearn.model_selection import GridSearchCV
-gridsearch = GridSearchCV(pipe, grid_param, cv=5, n_jobs=-1)
-best_model = gridsearch.fit(X_train,y_train)
-
-best_model.score(X_test,y_test)
-______________________________________________________________________
-
 Steps to follow for Build the Machine Learning model:
 
 1. Data
@@ -250,3 +229,76 @@ Steps to follow for Build the Machine Learning model:
 6.3. Confusion matrices for models
 6.4. ROC - Curves for models
 6.5. Precision recall curves
+______________________________________
+Auto-SKlearn
+
+!apt-get install swig -y
+!pip install Cython numpy
+!pip install auto-sklearn
+
+import sklearn
+import autosklearn.classification as classifier
+from sklearn.model_selection import train_test_split
+
+automl = classifier.AutoSklearnClassifier(time_left_for_this_task=180,per_run_time_limit=40)
+automl.fit(X_train,y_train)
+y_pred=automl.predict(X_test)
+
+from sklearn.metrics import accuracY_score,confusion_matrix
+ac = accuracy_score(y_pred, y_test)
+cm = confusion_matrix(y_pred, y_test)
+print(cm)
+print(ac)
+
+automl.show_models()
+________________________________
+
+MAKE_pipeline
+
+from sklearn.pipeline import make_pipeline
+
+from sklearn.ensemble import RandomForestClassifier
+pipe = make_pipeline(RandomForestClassifier())
+grid_param = [
+		{"randomforestclassifier":RandomForestClassifier(),
+		 "randomforestclassifier__n_estimators":[10,100,1000],
+		 "randomforestclassifier__max_depth":[5,8,15,25,30,45]
+		}]
+
+from sklearn.model_selection import GridSearchCV
+gridsearch = GridSearchCV(pipe, grid_param, cv=5, n_jobs=-1)
+best_model = gridsearch.fit(X_train,y_train)
+
+best_model.score(X_test,y_test)
+____________________________________
+METRICS IN CLASSIFICATION PROBLEM
+1. confsion martix
+2. FPR(Type l Error)
+3. FNR(Type ll Error)
+4. Recall 
+5. Predision 
+6. Accuracy
+7. FBeta
+8. Cohen Kappa
+9. ROC(Curve, AUC Score)
+10.PR curve
+___________________
+Adaboost (Adaptive Boosting)
+Adaboost combines multiple weak learners into a single strong learner. 
+This method does not follow Bootstrapping. However, it will create different decision trees with a single split (one depth), called decision stumps. 
+The number of decision stumps it will make will depend on the number of features in the dataset. Suppose there are M features then, Adaboost will create M  decision stumps. 
+1.  We will assign an equal sample weight to each observation. 
+2. We will create M decision stumps, for M number of features.
+3. Out of all M decision stumps, I first have to select one best decision tree model. For selecting it, we will either calculate the Entropy or Gini coefficient. The model with lesser entropy will be selected (means model that is less disordered).
+4. Now, after the first decision stump is built, an algorithm would evaluate this decision and check how many observations the model has misclassified.
+5. Suppose out of N observations, The first decision stump has misclassified T number of observations.
+6. For this, we will calculate the total error (TE), which is equal to T/N.
+7. Now we will calculate the performance of the first decision stump.
+Performance of stump = 1/2*loge((1-TE)/TE)
+8. Now we will update the weights assigned before. To do this, we will first update the weights of those observations, which we have misclassified. The weights of wrongly classified observations will be increased and the weights of correctly classified weights will be reduced.
+9. By using this formula: old weight * e performance of stump
+10. Now respectively for each observation, we will add and subtract the updated weights to get the final weights. 
+11. But these weights are not normalized that is their sum is not equal to one. To do this, we will sum them and divide each final weight with that sum. 
+12. After this, we have to make our second decision stump. For this, we will make a class intervals for the normalized weights.
+13. After that, we want to make a second weak model. But to do that, we need a sample dataset on which the second weak model can be run. For making it, we will run N number of iterations. On each iteration, it will calculate a random number ranging between 0-1 and this random will be compared with class intervals we created and on which class interval it lies, that row will be selected for sample data set. So new sample data set would also be of N observation. 
+14. This whole process will continue for M decision stumps. The final sequential tree would be considered as the final tree.
